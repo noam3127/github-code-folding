@@ -1,0 +1,26 @@
+{
+  "name": "GitHub Code Collapse",
+  "version": "0.0.1",
+  "description": "Enables code collapsing in GitHub",
+  "homepage_url": "https://github.com/noam3127/github-code-collapse",
+  "manifest_version": 2,
+  "minimum_chrome_version": "49",
+  "permissions": [
+    "tabs", "https://github.com/*"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
+      "css": [
+        "style.css"
+      ],
+      "js": [
+        "lib/jquery-3.1.1.min.js",
+        "main.js"
+      ]
+    }
+  ]
+}

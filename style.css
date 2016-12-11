@@ -1,0 +1,26 @@
+td.blob-code.blob-code-inner {
+  padding-left: 13px;
+}
+.collapser {
+  position: absolute;
+  left: 2px;
+  width: 22px;
+  opacity: 0.5;
+  transition: 0.15s;
+}
+.collapser:hover {
+  opacity: 1;
+}
+.sideways {
+  transform: rotate(-90deg);
+  transform-origin: 16% 49%;
+  opacity: 1;
+}
+.hidden-line {
+  display: none;
+}
+.ellipsis {
+  padding: 1px 2px;
+  margin-left: 2px;
+  background: rgba(255, 235, 59, 0.4);
+}
