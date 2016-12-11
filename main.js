@@ -1,6 +1,10 @@
 $(function() {
-  setTimeout(function() {
   'use strict';
+
+  // In case this script has already been run and modified the DOM on a previous page in github,
+  // make sure to reset it.
+  $('span.collapser').remove();
+
   const codeLines = $('table.highlight .blob-code-inner');
   const codeLinesText = $.map(codeLines, l => $(l).text());
   const triangle =
@@ -29,10 +33,9 @@ $(function() {
     return prev === -1 ? getPreviousSpaces(map, lineNum - 1) : {lineNum: lineNum - 1, count: prev};
   };
 
-  for (let lineNum = 0; lineNum < codeLinesText.length - 1; lineNum++) {
+  for (let lineNum = 0; lineNum < codeLinesText.length; lineNum++) {
     let line = codeLinesText[lineNum];
     let count = line.trim().length ? countInitialWhiteSpace(line.split('')) : -1;
-    console.log(count)
     spaceMap.set(lineNum, count);
 
     function tryPair() {
@@ -51,6 +54,7 @@ $(function() {
       stack.push(prevSpaces.lineNum);
     }
   }
+  // console.log(pairs);
 
   const toggleCode = (action, start, end) => {
     if (action === 'hide') {
@@ -81,14 +85,13 @@ $(function() {
   });
 
   // NOTE: Old unoptimized algorithm
-  //
+
   // const spacesCount = codeLinesText.reduce((acc, line, i) => {
   //   let numWhiteSpace;
   //   if (!line.trim().length) {
   //     numWhiteSpace = -1;
   //   } else {
   //     numWhiteSpace = countInitialWhiteSpace(line.split(''));
-  //     // acc.push(numWhiteSpace)
   //   }
   //   acc.push(numWhiteSpace)
   //   return acc;
@@ -112,5 +115,4 @@ $(function() {
   //     pairs[i] = j;
   //   }
   // }
-}, 300);
 });

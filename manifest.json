@@ -1,26 +1,28 @@
 {
-  "name": "GitHub Code Collapse",
+  "name": "GitHub Code Folding",
   "version": "0.0.1",
-  "description": "Enables code collapsing in GitHub",
-  "homepage_url": "https://github.com/noam3127/github-code-collapse",
+  "description": "Enable code folding when viewing files in GitHub.",
+  "homepage_url": "https://github.com/noam3127/github-code-folding",
   "manifest_version": 2,
   "minimum_chrome_version": "49",
   "permissions": [
-    "tabs", "https://github.com/*"
+    "tabs",
+    "webNavigation",
+    "*://github.com/*"
   ],
-
-  "content_scripts": [
-    {
-      "matches": [
-        "https://github.com/*"
-      ],
-      "css": [
-        "style.css"
-      ],
-      "js": [
-        "lib/jquery-3.1.1.min.js",
-        "main.js"
-      ]
-    }
-  ]
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [{
+    "matches": [
+      "*://github.com/*"
+    ],
+    "css": [
+      "style.css"
+    ],
+    "js": [
+      "lib/jquery-3.1.1.min.js",
+      "main.js"
+    ]
+  }]
 }
