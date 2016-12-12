@@ -13,6 +13,9 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "icons": {
+    "128": "images/icon-128.png"
+  },
   "content_scripts": [{
     "matches": [
       "*://github.com/*"
