@@ -5,7 +5,7 @@ $(function() {
   // make sure to reset it.
   $('span.collapser').remove();
 
-  const codeLines = $('table.highlight .blob-code-inner');
+  const codeLines = $('.file table.highlight .blob-code-inner');
   const codeLinesText = $.map(codeLines, l => $(l).text());
   const triangle =
     '<span class="collapser"><svg version="1.1" width="7px" fill="#969896" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">'+
@@ -84,35 +84,13 @@ $(function() {
     }
   });
 
-  // NOTE: Old unoptimized algorithm
-
-  // const spacesCount = codeLinesText.reduce((acc, line, i) => {
-  //   let numWhiteSpace;
-  //   if (!line.trim().length) {
-  //     numWhiteSpace = -1;
-  //   } else {
-  //     numWhiteSpace = countInitialWhiteSpace(line.split(''));
-  //   }
-  //   acc.push(numWhiteSpace)
-  //   return acc;
-  // }, []);
-  // for (let i = 0; i < spacesCount.length - 1; i++) {
-  //   let count = spacesCount[i];
-  //   let j = i;
-  //   do {
-  //     j++
-  //   } while (spacesCount[j] === -1)
-
-  //   if (count < spacesCount[j] && count !== -1) {
-  //     let startCount = count;
-  //     let endCount = spacesCount[j];
-  //     while (endCount > startCount) {
-  //       j++;
-  //       if (spacesCount[j] !== -1) {
-  //         endCount = spacesCount[j];
-  //       }
-  //     }
-  //     pairs[i] = j;
-  //   }
-  // }
+  $('.file .blob-code-inner').on('click', '.ellipsis', function(elem) {
+    let e = $(this);
+    let td = e.closest('td').attr('id');
+    e.siblings('.sideways').removeClass('sideways');
+    if (td && td.length) {
+      let index = parseInt(td.slice(2)) - 1;
+      toggleCode('show', index + 1, pairs.get(index));
+    }
+  });
 });

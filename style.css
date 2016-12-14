@@ -22,5 +22,9 @@ td.blob-code.blob-code-inner {
 .ellipsis {
   padding: 1px 2px;
   margin-left: 2px;
+  cursor: pointer;
   background: rgba(255, 235, 59, 0.4);
+}
+.ellipsis:hover {
+  background: rgba(255, 235, 59, 0.7);
 }

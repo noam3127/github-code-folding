@@ -1,10 +1,12 @@
 {
   "name": "GitHub Code Folding",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Enable code folding when viewing files in GitHub.",
   "homepage_url": "https://github.com/noam3127/github-code-folding",
   "manifest_version": 2,
   "minimum_chrome_version": "49",
+  "author": "Noam Lustiger",
+  "short_name": "Github Code Folding",
   "permissions": [
     "tabs",
     "webNavigation",
@@ -14,7 +16,8 @@
     "scripts": ["background.js"]
   },
   "icons": {
-    "128": "images/icon-128.png"
+    "128": "images/icon-128.png",
+    "48": "images/icon-48.png"
   },
   "content_scripts": [{
     "matches": [
