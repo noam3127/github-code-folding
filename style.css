@@ -14,7 +14,7 @@ td.blob-code.blob-code-inner {
 .sideways {
   transform: rotate(-90deg);
   transform-origin: 16% 49%;
-  opacity: 1;
+  opacity: 0.8;
 }
 .hidden-line {
   display: none;
