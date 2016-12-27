@@ -1,6 +1,6 @@
 {
   "name": "GitHub Code Folding",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Enable code folding when viewing files in GitHub.",
   "homepage_url": "https://github.com/noam3127/github-code-folding",
   "manifest_version": 2,
@@ -9,7 +9,6 @@
   "short_name": "Github Code Folding",
   "permissions": [
     "tabs",
-    "webNavigation",
     "*://github.com/*"
   ],
   "background": {

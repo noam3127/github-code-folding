@@ -54,7 +54,6 @@ $(function() {
       stack.push(prevSpaces.lineNum);
     }
   }
-  // console.log(pairs);
 
   const toggleCode = (action, start, end) => {
     if (action === 'hide') {
