@@ -16,6 +16,8 @@ $(function() {
   const spaceMap = new Map();
   const pairs = new Map();
   const stack = [];
+  const plusKeys = [107, 187];
+  const minusKeys = [109, 189];
 
   const countInitialWhiteSpace = arr => {
     const getWhiteSpaceIndex = i => {
@@ -69,6 +71,26 @@ $(function() {
     }
   }
 
+  const foldAll = () => {
+    $('.collapser:not(:first)').addClass('sideways');
+
+    pairs.forEach((end, start) => {
+      if (start !== 0) {
+        toggleCode('hide', start + 1, end + 1);
+      }
+    });
+  };
+
+  const unfoldAll = () => {
+    $('.collapser:not(:first)').removeClass('sideways');
+
+    pairs.forEach((end, start) => {
+      if (start !== 0) {
+        toggleCode('show', start + 1, end + 1);
+      }
+    });
+  };
+
   $('.collapser').on('click', function(elem) {
     let e = $(this);
     let td = e.closest('td').attr('id');
@@ -91,6 +113,19 @@ $(function() {
     if (td && td.length) {
       let index = parseInt(td.slice(2)) - 1;
       toggleCode('show', index + 1, pairs.get(index));
+    }
+  });
+
+  $(document).on('keydown', (e) => {
+    if (window.location.hostname === 'github.com' && e.ctrlKey === true && e.shiftKey === true) {
+        if (plusKeys.indexOf(e.which) > -1) {
+          e.preventDefault();
+          unfoldAll();
+        }
+        else if (minusKeys.indexOf(e.which) > -1) {
+          e.preventDefault();
+          foldAll();
+        }
     }
   });
 });
