@@ -19,7 +19,7 @@ $(function() {
 
   const countInitialWhiteSpace = arr => {
     const getWhiteSpaceIndex = i => {
-      if (arr[i] !== ' ') {
+      if (arr[i] !== ' ' && arr[i] !== '\t') {
         return i;
       }
       i++;
