@@ -58,13 +58,20 @@ $(function() {
   const toggleCode = (action, start, end) => {
     if (action === 'hide') {
       codeLines.slice(start, end).parent('tr').addClass('hidden-line');
-      $(codeLines[start - 1]).append($('<span class="pl-smi ellipsis">...</span>'));
+
+      if ($(codeLines[start - 1]).find('.ellipsis').length === 0) {
+        $(codeLines[start - 1]).append($('<span class="pl-smi ellipsis">...</span>'));
+      }
     } else if (action === 'show') {
       let sliced = codeLines.slice(start, end);
       sliced.parent('tr').removeClass('hidden-line');
       $(sliced).find('.sideways').removeClass('sideways');
       sliced.find('.ellipsis').remove();
       $(codeLines[start - 1]).find('.ellipsis').remove();
+    }
+
+    if (hasLoaded) {
+      checkStorage(start, end);
     }
   }
 
@@ -92,4 +99,71 @@ $(function() {
       toggleCode('show', index + 1, pairs.get(index));
     }
   });
+
+  const STORAGE_ID = document.location.href;
+  let hasLoaded = false;
+
+  function checkStorage(start, end) {
+    try {
+      if (localStorage.getItem(STORAGE_ID) === null) {
+        setStorage([]);
+      }
+
+      updateStorage(`${start}-${end}`);
+    } catch(err) {
+      return false;
+    }
+  }
+
+  function getStorage() {
+    return JSON.parse(localStorage.getItem(STORAGE_ID));
+  }
+
+  function setStorage(storage) {
+    localStorage.setItem(STORAGE_ID, JSON.stringify(storage));
+  }
+
+  function updateStorage(key) {
+    let isDuplicate = false;
+    let [lower, higher] = key.split('-');
+    let storage = getStorage();
+    let deletions = [];
+
+    storage.forEach(function(item, index) {
+      let currentLower = parseInt(item.key.split('-')[0]);
+
+      if (key === item.key) {
+        isDuplicate = true;
+        deletions.push(index);
+      } else if ( (parseInt(lower) < currentLower) && (parseInt(higher) > currentLower) ) {
+        deletions.push(index);
+      }
+    });
+
+    let deletionsLength = deletions.length;
+    for (let j = deletionsLength - 1; j >= 0; j--) {
+      storage.splice(deletions[j], 1);
+    }
+
+    if (!isDuplicate) {
+      storage.push({ key: key });
+    }
+
+    setStorage(storage);
+  }
+
+  (function collapseItemsOnload() {
+    try {
+      if (localStorage.getItem(STORAGE_ID) !== null) {
+        let storage = getStorage();
+
+        storage.forEach(function(item) {
+          document.querySelector('#LC' + item.key.split('-')[0] + ' .collapser').click();
+        });
+      }
+    } catch(err) {
+      return false;
+    }
+    hasLoaded = true;
+  })();
 });
