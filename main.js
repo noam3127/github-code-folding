@@ -156,19 +156,29 @@ $(function() {
     try {
       if (localStorage.getItem(STORAGE_ID) !== null) {
         let storage = getStorage();
+        let storageLength = storage.length;
+        let passed = true;
+        let collapsed = [];
 
-        storage.forEach(function(item) {
-          let [lower, upper] = item.key.split('-');
-          upper++;
-          let lowerLine = document.querySelector('#LC' + lower).textContent;
-          let upperLine = document.querySelector('#LC' + upper).textContent;
+        for (let i = 0; i < storageLength; i++) {
+          let [lower, upper] = storage[i].key.split('-');
+          let lowerLine = lower - 1;
 
-          if (lowerLine.includes('{') && upperLine.includes('}')) {
-            document.querySelector('#LC' + lower + ' .collapser').click();
+          if (pairs.get(lowerLine) == upper) {
+            collapsed.push(lower);
           } else {
-            localStorage.removeItem(STORAGE_ID);
+            passed = false;
+            break;
           }
-        });
+        }
+
+        if (passed) {
+          collapsed.forEach(function(line) {
+            document.querySelector('#LC' + line + ' .collapser').click();
+          });
+        } else {
+          localStorage.removeItem(STORAGE_ID);
+        }
       }
     } catch(err) {
       return false;
