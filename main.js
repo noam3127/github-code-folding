@@ -158,7 +158,16 @@ $(function() {
         let storage = getStorage();
 
         storage.forEach(function(item) {
-          document.querySelector('#LC' + item.key.split('-')[0] + ' .collapser').click();
+          let [lower, upper] = item.key.split('-');
+          upper++;
+          let lowerLine = document.querySelector('#LC' + lower).textContent;
+          let upperLine = document.querySelector('#LC' + upper).textContent;
+
+          if (lowerLine.includes('{') && upperLine.includes('}')) {
+            document.querySelector('#LC' + lower + ' .collapser').click();
+          } else {
+            localStorage.removeItem(STORAGE_ID);
+          }
         });
       }
     } catch(err) {
