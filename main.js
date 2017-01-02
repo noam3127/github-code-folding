@@ -152,7 +152,7 @@ $(function() {
     setStorage(storage);
   }
 
-  (function collapseItemsOnload() {
+  function collapseRanges() {
     try {
       if (localStorage.getItem(STORAGE_ID) !== null) {
         let storage = getStorage();
@@ -184,5 +184,7 @@ $(function() {
       return false;
     }
     hasLoaded = true;
-  })();
+  }
+
+  $(document).ready(collapseRanges);
 });
