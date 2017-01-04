@@ -1,32 +1,73 @@
-$(function() {
+(function() {
   'use strict';
 
   // In case this script has already been run and modified the DOM on a previous page in github,
   // make sure to reset it.
-  $('span.collapser').remove();
+  (function removePreviousArrows() {
+    const arrows = document.querySelectorAll('span.collaper');
+    arrows.forEach(a => a.parentNode.removeChild(a));
+  })()
 
-  const codeLines = $('.file table.highlight .blob-code-inner');
-  const codeLinesText = $.map(codeLines, l => $(l).text());
-  const triangle =
-    '<span class="collapser"><svg version="1.1" width="7px" fill="#969896" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">'+
+  const [...codeLines] = document.querySelectorAll('.file table.highlight .blob-code-inner');
+  const codeLinesText = codeLines.map(l => l.textContent);
+
+  const _arrow =
+    '<svg version="1.1" width="7px" fill="#969896" xmlns="http://www.w3.org/2000/svg" '+
+      'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">'+
       '<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>' +
       '<g><path d="M579.5,879.8c-43.7,75.7-115.3,75.7-159,0L28.7,201.1c-43.7-75.7-8-137.7,79.5-137.7h783.7c87.5,0,123.2,62,79.5,137.7L579.5,879.8z"></path></g>'+
-    '</svg><span>';
+    '</svg>';
+
+  class Element {
+    constructor(name) {
+      this.element = document.createElement(name);
+    }
+    addClass(className) {
+      this.element.classList.add(className)
+      return this;
+    }
+    setId(id) {
+      this.element.id = id;
+      return this;
+    }
+    setHTML(str) {
+      this.element.innerHTML = str;
+      return this;
+    }
+  }
+
+  const arrowFactory = (id) => {
+    return new Element('span')
+      .addClass('collapser')
+      .setId(id)
+      .setHTML(_arrow)
+      .element;
+  }
+
+  const ellipsisFactory = (id) => {
+    return new Element('span')
+      .addClass('pl-smi')
+      .addClass('ellipsis')
+      .setId(id)
+      .setHTML('...')
+      .element;
+  };
 
   const spaceMap = new Map();
   const pairs = new Map();
   const stack = [];
-
-  const countInitialWhiteSpace = arr => {
-    const getWhiteSpaceIndex = i => {
+  const blockStarts = [];
+  const countLeadingWhitespace = arr => {
+    const getWhitespaceIndex = i => {
       if (arr[i] !== ' ' && arr[i] !== '\t') {
         return i;
       }
       i++;
-      return getWhiteSpaceIndex(i);
+      return getWhitespaceIndex(i);
     }
-    return getWhiteSpaceIndex(0);
+    return getWhitespaceIndex(0);
   };
+
   const last = arr => arr[arr.length - 1];
   const getPreviousSpaces = (map, lineNum) => {
     let prev = map.get(lineNum - 1);
@@ -35,14 +76,16 @@ $(function() {
 
   for (let lineNum = 0; lineNum < codeLinesText.length; lineNum++) {
     let line = codeLinesText[lineNum];
-    let count = line.trim().length ? countInitialWhiteSpace(line.split('')) : -1;
+    let count = line.trim().length ? countLeadingWhitespace(line.split('')) : -1;
     spaceMap.set(lineNum, count);
 
     function tryPair() {
       let top = last(stack);
       if (count !== -1 && count <= spaceMap.get(top)) {
         pairs.set(top, lineNum);
-        $(codeLines[top]).prepend(triangle);
+        codeLines[top].setAttribute('block-start', 'true');
+        codeLines[top].appendChild(arrowFactory(`gcf-${top + 1}`));
+        blockStarts.push(codeLines[top]);
         stack.pop();
         return tryPair();
       }
@@ -54,42 +97,63 @@ $(function() {
       stack.push(prevSpaces.lineNum);
     }
   }
-
   const toggleCode = (action, start, end) => {
     if (action === 'hide') {
-      codeLines.slice(start, end).parent('tr').addClass('hidden-line');
-      $(codeLines[start - 1]).append($('<span class="pl-smi ellipsis">...</span>'));
+      const sliced = codeLines.slice(start, end);
+      sliced.forEach(elem => {
+        let tr = elem.parentNode;
+        if (tr.classList) {
+          tr.classList.add('hidden-line');
+        } else {
+          tr.className += ' hidden-line';
+        }
+        // Check if any children blocks of this parent block have previously
+        // been collapsed so we can remove ellipsis and reset arrows
+        let previouslyCollapsed = elem.querySelectorAll('.ellipsis');
+        previouslyCollapsed.forEach(block => {
+          block.previousSibling.classList.remove('sideways');
+          block.parentNode.removeChild(block);
+        });
+      });
+      codeLines[start - 1].appendChild(ellipsisFactory(`ellipsis-${start - 1}`));
     } else if (action === 'show') {
-      let sliced = codeLines.slice(start, end);
-      sliced.parent('tr').removeClass('hidden-line');
-      $(sliced).find('.sideways').removeClass('sideways');
-      sliced.find('.ellipsis').remove();
-      $(codeLines[start - 1]).find('.ellipsis').remove();
+      const sliced = codeLines.slice(start, end);
+      const topLine = codeLines[start - 1];
+      sliced.forEach(elem => {
+        let tr = elem.parentNode;
+        if (tr.classList) {
+          tr.classList.remove('hidden-line');
+        } else {
+          tr.className.replace(' hidden-line', '');
+        }
+      });
+      topLine.removeChild(topLine.lastChild);
     }
   }
 
-  $('.collapser').on('click', function(elem) {
-    let e = $(this);
-    let td = e.closest('td').attr('id');
-    if (td && td.length) {
-      let index = parseInt(td.slice(2)) - 1;
-      if (e.hasClass('sideways')) {
-        e.removeClass('sideways');
-        toggleCode('show', index + 1, pairs.get(index));
-      } else {
-        e.addClass('sideways');
-        toggleCode('hide', index + 1, pairs.get(index));
-      }
+  const arrows = document.querySelectorAll('.collapser');
+  arrows.forEach(c => c.addEventListener('click', e => {
+    let svg = e.currentTarget;
+    let td = e.currentTarget.parentElement;
+    let id = td.getAttribute('id');
+    let index = parseInt(id.slice(2)) - 1;
+    if (svg.classList.contains('sideways')) {
+      svg.classList.remove('sideways');
+      toggleCode('show', index + 1, pairs.get(index));
+    } else {
+      svg.classList.add('sideways');
+      toggleCode('hide', index + 1, pairs.get(index));
     }
-  });
+  }));
 
-  $('.file .blob-code-inner').on('click', '.ellipsis', function(elem) {
-    let e = $(this);
-    let td = e.closest('td').attr('id');
-    e.siblings('.sideways').removeClass('sideways');
-    if (td && td.length) {
-      let index = parseInt(td.slice(2)) - 1;
+  blockStarts.forEach(line => line.addEventListener('click', e => {
+    if (e.target.classList.contains('ellipsis')) {
+      let td = e.target.parentElement;
+      let svg = td.lastChild;
+      let id = e.target.parentElement.getAttribute('id');
+      let index = parseInt(id.slice(2)) - 1;
+      svg.classList.remove('sideways');
       toggleCode('show', index + 1, pairs.get(index));
     }
-  });
-});
+  }));
+})()
