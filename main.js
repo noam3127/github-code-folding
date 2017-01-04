@@ -4,7 +4,7 @@
   // In case this script has already been run and modified the DOM on a previous page in github,
   // make sure to reset it.
   (function removePreviousArrows() {
-    const arrows = document.querySelectorAll('span.collaper');
+    const arrows = document.querySelectorAll('span.collapser');
     arrows.forEach(a => a.parentNode.removeChild(a));
   })()
 
