@@ -6,6 +6,8 @@
   (function removePreviousArrows() {
     const arrows = document.querySelectorAll('span.collapser');
     arrows.forEach(a => a.parentNode.removeChild(a));
+    const ellipsis = document.querySelectorAll('.ellipsis');
+    ellipsis.forEach(a => a.parentNode.removeChild(a));
   })()
 
   const [...codeLines] = document.querySelectorAll('.file table.highlight .blob-code-inner');
@@ -97,6 +99,7 @@
       stack.push(prevSpaces.lineNum);
     }
   }
+
   const toggleCode = (action, start, end) => {
     if (action === 'hide') {
       const sliced = codeLines.slice(start, end);
@@ -129,10 +132,11 @@
       });
       topLine.removeChild(topLine.lastChild);
     }
-  }
+  };
 
   const arrows = document.querySelectorAll('.collapser');
-  arrows.forEach(c => c.addEventListener('click', e => {
+  function arrowListener(e) {
+    e.preventDefault();
     let svg = e.currentTarget;
     let td = e.currentTarget.parentElement;
     let id = td.getAttribute('id');
@@ -144,16 +148,25 @@
       svg.classList.add('sideways');
       toggleCode('hide', index + 1, pairs.get(index));
     }
-  }));
+  };
 
-  blockStarts.forEach(line => line.addEventListener('click', e => {
+  arrows.forEach(c => {
+    c.addEventListener('click', arrowListener);
+  });
+
+  function ellipsisListener(e) {
+    if (!e.target.parentElement) return;
     if (e.target.classList.contains('ellipsis')) {
       let td = e.target.parentElement;
-      let svg = td.lastChild;
+      let svg = td.querySelector('.sideways');
       let id = e.target.parentElement.getAttribute('id');
       let index = parseInt(id.slice(2)) - 1;
       svg.classList.remove('sideways');
       toggleCode('show', index + 1, pairs.get(index));
     }
-  }));
+  };
+
+  blockStarts.forEach(line => {
+    line.addEventListener('click', ellipsisListener);
+  });
 })()
