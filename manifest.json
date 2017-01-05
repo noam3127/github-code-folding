@@ -12,20 +12,19 @@
     "*://github.com/*"
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "icons": {
     "128": "images/icon-128.png"
   },
   "content_scripts": [{
+    "run_at" : "document_end",
     "matches": [
       "*://github.com/*"
     ],
     "css": [
       "style.css"
-    ],
-    "js": [
-      "main.js"
     ]
   }]
 }

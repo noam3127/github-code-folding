@@ -3,11 +3,13 @@
 
   // In case this script has already been run and modified the DOM on a previous page in github,
   // make sure to reset it.
-  (function removePreviousArrows() {
-    const arrows = document.querySelectorAll('span.collapser');
+  (function resetPage() {
+    const arrows = document.querySelectorAll('.collapser');
     arrows.forEach(a => a.parentNode.removeChild(a));
     const ellipsis = document.querySelectorAll('.ellipsis');
-    ellipsis.forEach(a => a.parentNode.removeChild(a));
+    ellipsis.forEach(e => e.parentNode.removeChild(e));
+    const hiddenLines = document.querySelectorAll('.hidden-line');
+    hiddenLines.forEach(l => l.classList.remove('hidden-line'));
   })()
 
   const [...codeLines] = document.querySelectorAll('.file table.highlight .blob-code-inner');
