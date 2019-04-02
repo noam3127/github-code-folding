@@ -1,18 +1,7 @@
 (function() {
   'use strict';
 
-  // In case this script has already been run and modified the DOM on a previous page in github,
-  // make sure to reset it.
-  (function resetPage() {
-    const arrows = document.querySelectorAll('.collapser');
-    arrows.forEach(a => a.parentNode.removeChild(a));
-    const ellipsis = document.querySelectorAll('.ellipsis');
-    ellipsis.forEach(e => e.parentNode.removeChild(e));
-    const hiddenLines = document.querySelectorAll('.hidden-line');
-    hiddenLines.forEach(l => l.classList.remove('hidden-line'));
-  })()
-
-  const [...codeLines] = document.querySelectorAll('.file table.highlight .blob-code-inner');
+  const codeLines = [...document.querySelectorAll('table.js-file-line-container tr .blob-code-inner')];
   const codeLinesText = codeLines.map(l => l.textContent);
 
   const _arrow =
@@ -88,7 +77,8 @@
       if (count !== -1 && count <= spaceMap.get(top)) {
         pairs.set(top, lineNum);
         codeLines[top].setAttribute('block-start', 'true');
-        codeLines[top].appendChild(arrowFactory(`gcf-${top + 1}`));
+        const arrow = arrowFactory(`gcf-${top + 1}`);
+        codeLines[top].appendChild(arrow);
         blockStarts.push(codeLines[top]);
         stack.pop();
         return tryPair();
