@@ -1,6 +1,6 @@
 # GitHub Code Folding
-### Chrome extension that enables code folding in GitHub
-Install via the [Chrome web store](https://chrome.google.com/webstore/detail/github-code-folding/lefcpjbffalgdcdgidjdnmabfenecjdf/)
+### Chrome and Firefox extension that enables code folding in GitHub
+Install via the [Chrome web store](https://chrome.google.com/webstore/detail/github-code-folding/lefcpjbffalgdcdgidjdnmabfenecjdf/) or [Mozilla AMO](https://addons.mozilla.org/en-US/firefox/addon/github-code-folding/) 
 
 ![demo](/images/demo.gif)
 
