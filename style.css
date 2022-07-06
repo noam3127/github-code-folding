@@ -6,25 +6,33 @@ td.blob-code.blob-code-inner {
   left: 2px;
   width: 22px;
   opacity: 0.5;
-  transition: 0.15s;
 }
+
 .collapser:hover {
   opacity: 1;
 }
-.sideways {
+
+.collapser > svg {
+  transition: 0.15s ease-in-out;
+}
+
+.sideways > svg {
   transform: rotate(-90deg);
-  transform-origin: 16% 49%;
+  transform-origin: center;
   opacity: 0.8;
 }
+
 .hidden-line {
   display: none;
 }
+
 .ellipsis {
   padding: 1px 2px;
   margin-left: 2px;
   cursor: pointer;
   background: rgba(255, 235, 59, 0.4);
 }
+
 .ellipsis:hover {
   background: rgba(255, 235, 59, 0.7);
 }

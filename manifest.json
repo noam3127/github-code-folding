@@ -11,7 +11,8 @@
     "scripting"
   ],
   "host_permissions": [
-    "*://github.com/*"
+    "*://github.com/*",
+    "https://bbgithub.dev.bloomberg.com/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -23,7 +24,8 @@
   "content_scripts": [{
     "run_at" : "document_end",
     "matches": [
-      "*://github.com/*"
+      "*://github.com/*",
+      "https://bbgithub.dev.bloomberg.com/*"
     ],
     "css": [
       "style.css"

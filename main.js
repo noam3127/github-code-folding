@@ -1,6 +1,10 @@
 (function () {
   "use strict";
 
+  [...document.querySelectorAll('.collapser')].forEach(arrow => {
+    arrow.parentElement.removeChild(arrow);
+  });
+
   const codeLines = [
     ...document.querySelectorAll(
       "table.js-file-line-container tr .blob-code-inner"
@@ -14,6 +18,7 @@
     "<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>" +
     '<g><path d="M579.5,879.8c-43.7,75.7-115.3,75.7-159,0L28.7,201.1c-43.7-75.7-8-137.7,79.5-137.7h783.7c87.5,0,123.2,62,79.5,137.7L579.5,879.8z"></path></g>' +
     "</svg>";
+
 
   class Element {
     constructor(name) {
