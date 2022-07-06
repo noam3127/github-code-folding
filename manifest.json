@@ -4,7 +4,7 @@
   "description": "Enable code folding when viewing files in GitHub.",
   "homepage_url": "https://github.com/noam3127/github-code-folding",
   "manifest_version": 3,
-  "minimum_chrome_version": "49",
+  "minimum_chrome_version": "88",
   "author": "Noam Lustiger",
   "short_name": "Github Code Folding",
   "permissions": [
