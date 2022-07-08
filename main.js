@@ -19,8 +19,12 @@
         el.parentElement.removeChild(el);
     });
 
+    document.querySelectorAll('.' + classes.hidden).forEach((el) => {
+        el.classList.remove(classes.hidden);
+    });
+
     document.querySelectorAll(`[${classes.previouslyCollapsed}]`).forEach((el) => {
-        el.removeAttribute(`[${classes.previouslyCollapsed}]`);
+        el.removeAttribute(classes.previouslyCollapsed);
     });
 
     const codeLines = [...document.querySelectorAll('table.js-file-line-container tr .blob-code-inner')];
@@ -56,7 +60,7 @@
     };
 
     const ellipsisFactory = (id) => {
-        return new Element('span').addClass('pl-smi').addClass(classes.ellipsis).setId(id).setHTML('...').element;
+        return new Element('span').addClass(classes.ellipsis).setId(id).setHTML('...').element;
     };
 
     const spaceMap = new Map();
