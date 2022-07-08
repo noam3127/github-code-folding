@@ -1,38 +1,38 @@
 td.blob-code.blob-code-inner {
-  padding-left: 13px;
+    padding-left: 13px;
 }
-.collapser {
-  margin-left: -16px;
-  margin-right: 2px;
-  padding-right: 6px;
-  opacity: 0.5;
-}
-
-.collapser:hover {
-  opacity: 1;
+.gcf-collapser {
+    margin-left: -16px;
+    margin-right: 2px;
+    padding-right: 6px;
+    opacity: 0.5;
 }
 
-.collapser > svg {
-  transition: 0.15s ease-in-out;
+.gcf-collapser:hover {
+    opacity: 1;
 }
 
-.sideways > svg {
-  transform: rotate(-90deg);
-  transform-origin: center;
-  opacity: 0.8;
+.gcf-collapser > svg {
+    transition: 0.15s ease-in-out;
 }
 
-.hidden-line {
-  display: none;
+.gcf-sideways > svg {
+    transform: rotate(-90deg);
+    transform-origin: center;
+    opacity: 0.8;
 }
 
-.ellipsis {
-  padding: 1px 2px;
-  margin-left: 2px;
-  cursor: pointer;
-  background: rgba(255, 235, 59, 0.4);
+.gcf-hidden-line {
+    display: none;
 }
 
-.ellipsis:hover {
-  background: rgba(255, 235, 59, 0.7);
+.gcf-ellipsis {
+    padding: 1px 2px;
+    margin-left: 2px;
+    cursor: pointer;
+    background: rgba(255, 235, 59, 0.4);
+}
+
+.gcf-ellipsis:hover {
+    background: rgba(255, 235, 59, 0.7);
 }

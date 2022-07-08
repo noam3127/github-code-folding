@@ -2,15 +2,25 @@
     'use strict';
 
     const classes = {
-        hidden: 'hidden-line',
-        sideways: 'sideways',
-        collapser: 'collapser',
-        ellipsis: 'ellipsis',
-        previouslyCollapsed: 'stay-hidden',
+        hidden: 'gcf-hidden-line',
+        sideways: 'gcf-sideways',
+        collapser: 'gcf-collapser',
+        ellipsis: 'gcf-ellipsis',
+        blockStart: 'gcf-block-start',
+        previouslyCollapsed: 'gcf-stay-hidden',
     };
 
-    [...document.querySelectorAll('.' + classes.collapser)].forEach((arrow) => {
+    // Clear old classes and attributes from previous page loads
+    document.querySelectorAll('.' + classes.collapser).forEach((arrow) => {
         arrow.parentElement.removeChild(arrow);
+    });
+
+    document.querySelectorAll('.' + classes.ellipsis).forEach((el) => {
+        el.parentElement.removeChild(el);
+    });
+
+    document.querySelectorAll(`[${classes.previouslyCollapsed}]`).forEach((el) => {
+        el.removeAttribute(`[${classes.previouslyCollapsed}]`);
     });
 
     const codeLines = [...document.querySelectorAll('table.js-file-line-container tr .blob-code-inner')];
@@ -79,7 +89,7 @@
             let top = last(stack);
             if (count !== -1 && count <= spaceMap.get(top)) {
                 pairs.set(top, lineNum);
-                codeLines[top].setAttribute('block-start', 'true');
+                // codeLines[top].setAttribute(classes.blockStart, true);
                 const arrow = arrowFactory(`gcf-${top + 1}`);
                 codeLines[top].prepend(arrow);
                 blockStarts.push(codeLines[top]);
