@@ -2,9 +2,8 @@ td.blob-code.blob-code-inner {
   padding-left: 13px;
 }
 .collapser {
-  position: absolute;
-  left: 2px;
-  width: 22px;
+  margin-left: -12px;
+  margin-right: 6px;
   opacity: 0.5;
 }
 
