@@ -7,7 +7,7 @@
         collapser: 'gcf-collapser',
         ellipsis: 'gcf-ellipsis',
         blockStart: 'gcf-block-start',
-        previouslyCollapsed: 'gcf-stay-hidden',
+        previouslyCollapsed: 'gcf-nested-hidden',
     };
 
     // Clear old classes and attributes from previous page loads
@@ -120,7 +120,9 @@
                 // protect the inner block from being expanded
                 // when this current outer block is expanded
                 if (tr.classList.contains(classes.hidden)) {
-                    tr.setAttribute(classes.previouslyCollapsed, true);
+                    const prev = parseInt(tr.getAttribute(classes.previouslyCollapsed));
+                    const count = prev ? prev + 1 : 1;
+                    tr.setAttribute(classes.previouslyCollapsed, count);
                 }
                 tr.classList.add(classes.hidden);
             });
@@ -131,10 +133,13 @@
 
             sliced.forEach((elem) => {
                 const tr = elem.parentElement;
-                if (!tr.getAttribute(classes.previouslyCollapsed)) {
+                const nestedCount = parseInt(tr.getAttribute(classes.previouslyCollapsed));
+                if (!nestedCount) {
                     tr.classList.remove(classes.hidden);
-                } else {
+                } else if (nestedCount === 1) {
                     tr.removeAttribute(classes.previouslyCollapsed);
+                } else {
+                    tr.setAttribute(classes.previouslyCollapsed, nestedCount - 1);
                 }
             });
             topLine.removeChild(topLine.lastChild);
@@ -176,4 +181,5 @@
     blockStarts.forEach((line) => {
         line.addEventListener('click', ellipsisListener);
     });
+
 })();
